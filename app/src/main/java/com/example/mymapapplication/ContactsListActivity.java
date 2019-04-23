@@ -63,6 +63,6 @@ public class ContactsListActivity extends AppCompatActivity {
         cursor.close();
 
         mTextView_Contacts.setText(builder.toString());
-      
+
     }
 }
