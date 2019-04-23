@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactsListActivity">
+
+    <Button
+        android:id="@+id/button_LoadContacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Load Contacts"
+
+        />
+
+    <TextView
+        android:id="@+id/textview_Contacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:layout_below="@id/button_LoadContacts"
+
+        />
+
+</RelativeLayout>

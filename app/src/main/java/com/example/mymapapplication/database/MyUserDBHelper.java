@@ -11,11 +11,11 @@ import android.util.Log;
 public class MyUserDBHelper extends SQLiteOpenHelper {
 
     // Database Name
-    private static final String DATABASE_NAME = "MyUsersDB.db";
+    private static final String DATABASE_NAME = "MyContactsDB.db";
     private static final int DATABASE_VERSION = 1;
 
     // Table Name
-    public final static String TABLE_NAME = "my_user";
+    public final static String TABLE_NAME = "my_contact";
 
     // Table Columns
     public final static String _ID = BaseColumns._ID;
@@ -37,7 +37,7 @@ public class MyUserDBHelper extends SQLiteOpenHelper {
                 COLUMN_USER_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_EMAIL_ID + " TEXT NOT NULL," +
                 COLUMN_USER_PHONE + " TEXT NOT NULL," +
-                COLUMN_USER_PHOTO + " TEXT NOT NULL" + ");";
+                COLUMN_USER_PHOTO + " BLOB" + ");";
         Log.v("MyUserDBHelper", "create table: " + CREATE_TABLE_USER_DIARY);
         sqLiteDatabase.execSQL(CREATE_TABLE_USER_DIARY);
     }

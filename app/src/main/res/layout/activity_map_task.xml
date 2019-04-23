@@ -12,27 +12,12 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".HomeActivity">
+        tools:context=".MapTaskActivity">
 
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar_layout" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout_User"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
-            app:tabBackground="@android:color/darker_gray"
-            app:tabIndicatorColor="#f00"
-            app:tabSelectedTextColor="#f00"
-            app:tabTextColor="#000" />
-
-        <FrameLayout
-            android:id="@+id/frameLayout_User"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/tabLayout_User" />
     </RelativeLayout>
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->

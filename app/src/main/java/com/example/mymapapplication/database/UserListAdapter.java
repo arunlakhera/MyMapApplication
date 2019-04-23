@@ -2,6 +2,9 @@ package com.example.mymapapplication.database;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mymapapplication.R;
+
+import java.io.ByteArrayOutputStream;
 
 public class UserListAdapter extends CursorAdapter {
 
@@ -20,10 +25,12 @@ public class UserListAdapter extends CursorAdapter {
     private TextView mUserEmail;
     private TextView mUserPhone;
     private ImageView mUserPhoto;
+    private String mUserUpdatedImage;
 
     public UserListAdapter(Context context, Cursor c) {
         super(context, c, 0);
         this.mContext = context;
+        usersDbHelper = new MyUserDBHelper(context);
     }
 
     @Override
@@ -37,7 +44,7 @@ public class UserListAdapter extends CursorAdapter {
         mUserName = view.findViewById(R.id.textview_User_Name);
         mUserEmail = view.findViewById(R.id.textview_User_Email);
         mUserPhone = view.findViewById(R.id.textview_User_Phone);
-        mUserPhoto = view.findViewById(R.id.imageview_Photo);
+        mUserPhoto = view.findViewById(R.id.imageview_User_Photo);
 
         int userNameColumnIndex = cursor.getColumnIndex("name");
         int userEmailColumnIndex = cursor.getColumnIndex("email_id");
@@ -55,10 +62,16 @@ public class UserListAdapter extends CursorAdapter {
 
     public void setValues(String name, String email, String phone, String photo){
 
-        mUserName.setText(name);
-        mUserEmail.setText(email);
-        mUserPhone.setText(phone);
-        //mUserPhoto.setText(name);
+            mUserName.setText(name);
+            mUserEmail.setText(email);
+            mUserPhone.setText(phone);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] imageBytes = baos.toByteArray();
+            imageBytes = Base64.decode(photo, Base64.DEFAULT);
+            Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            mUserPhoto.setImageBitmap(decodedImage);
+
     }
 
 }

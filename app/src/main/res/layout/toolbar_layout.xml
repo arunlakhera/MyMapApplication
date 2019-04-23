@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/menu_bar"
+    >
+
+    <Button
+        android:id="@+id/button_Menu"
+        android:layout_width="35dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="center|start"
+        android:background="@drawable/menu_icon"
+        android:gravity="center" />
+
+</LinearLayout>

@@ -57,7 +57,6 @@ public class UserListFragment extends Fragment {
         synchronized(mCursorAdapter){
             mCursorAdapter.notify();
         }
-
-
     }
+
 }

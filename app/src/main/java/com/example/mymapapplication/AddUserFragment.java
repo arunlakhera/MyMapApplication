@@ -1,9 +1,14 @@
 package com.example.mymapapplication;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.mymapapplication.database.MyUserDBHelper;
 
+import java.io.ByteArrayOutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +40,12 @@ public class AddUserFragment extends Fragment {
 
     private MyUserDBHelper userDbHelper;
     private Boolean recordExistFlag;
+
+    private final int REQUEST_IMAGE_CAPTURE = 1;
+    private Bitmap bp;
+    private byte[] photo;
+    private String mUserUpdatedImage;
+    private boolean photoUpdateFlag;
 
     public AddUserFragment() {
         //Required
@@ -68,13 +80,21 @@ public class AddUserFragment extends Fragment {
                     saveUserData();
                     clearData();
                 }
+            }
+        });
 
+        mUpdatePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                updateUserPhoto();
             }
         });
 
 
         return view;
     }
+
 
     // Function to check User Data
     public boolean checkUserData(){
@@ -84,7 +104,7 @@ public class AddUserFragment extends Fragment {
         userName = mUserName.getText().toString().trim();
         userEmailId = mUserEmailId.getText().toString().trim();
         userPhone = mUserPhone.getText().toString().trim();
-        userPhoto = "PHOTO";
+        userPhoto = mUserUpdatedImage;
 
         if(userName.isEmpty()){
             mUserName.setError("Please Enter Name");
@@ -141,5 +161,55 @@ public class AddUserFragment extends Fragment {
         mUserPhone.setText("");
         mUserPhoto.setImageResource(R.drawable.user_img);
     }
+
+    /**
+     * Function to show Camera to user
+     */
+    public void updateUserPhoto() {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    /**
+     * Function to Set photo taken by user from camera
+     */
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+       super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mUserPhoto.setImageBitmap(imageBitmap);
+
+            Bitmap lastBitmap;
+            lastBitmap = imageBitmap;
+
+            //encoding image to string
+            mUserUpdatedImage = getStringImage(lastBitmap);
+            photoUpdateFlag = true;
+
+        }
+    }
+
+    /**
+     * Function to Encode Image to String
+     */
+    public String getStringImage(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedUserImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedUserImage;
+    }
+
 
 }
