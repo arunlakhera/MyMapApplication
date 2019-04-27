@@ -71,6 +71,7 @@ public class AddUserFragment extends Fragment {
         mAddUser = view.findViewById(R.id.button_Add_User);
 
         userDbHelper = new MyUserDBHelper(getContext());
+        photoUpdateFlag = false;
 
         mAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +91,6 @@ public class AddUserFragment extends Fragment {
                 updateUserPhoto();
             }
         });
-
 
         return view;
     }
@@ -150,8 +150,15 @@ public class AddUserFragment extends Fragment {
         if (recordExistFlag) {
             Toast.makeText(getContext(), "User With this Email ID already Exists!", Toast.LENGTH_LONG).show();
         } else {
+
+            if(!photoUpdateFlag && ((userPhoto == null) || (userPhoto.equals("NA")))) {
+
+                userPhoto = "NA";
+            }
+
             userDbHelper.insertUser(userName,userEmailId,userPhone,userPhoto);
             Toast.makeText(getContext(),"User Data Saved!", Toast.LENGTH_SHORT).show();
+
         }
     }
 

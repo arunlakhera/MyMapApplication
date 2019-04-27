@@ -12,7 +12,7 @@ public class MyContactsDBHelper extends SQLiteOpenHelper {
 
     // Database Name
     private static final String DATABASE_NAME = "MyContactsDB.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Table Name
     private final static String TABLE_NAME = "my_phone_contact";
@@ -29,6 +29,7 @@ public class MyContactsDBHelper extends SQLiteOpenHelper {
     // Create Table
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
         String CREATE_TABLE_CONTACT_DIARY = "CREATE TABLE " + TABLE_NAME +
                 "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_CONTACT_NAME + " TEXT NOT NULL," +
@@ -44,6 +45,11 @@ public class MyContactsDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(sqLiteDatabase);
 
+    }
+
+    public void removeContacts(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_NAME,null,null);
     }
 
     // Insert User in Database

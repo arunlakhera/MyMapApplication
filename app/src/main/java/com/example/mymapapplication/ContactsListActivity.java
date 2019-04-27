@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.mymapapplication.database.ContactsListAdapter;
 import com.example.mymapapplication.database.MyContactsDBHelper;
@@ -23,11 +23,16 @@ import java.util.List;
 public class ContactsListActivity extends AppCompatActivity {
 
     private Button mButton_LoadContacts;
-    private TextView mTextView_Contacts;
+    private Button mButton_ClearContacts;
     private MyContactsDBHelper contactsDbHelper;
     private ContactsListAdapter mCursorAdapter;
     ListView contactListView;
     private Cursor cursor;
+    private int total_contacts;
+
+    String id;
+    String name;
+    String phoneNumber;
 
     static final int PICK_CONTACT = 1;
     String st;
@@ -38,22 +43,57 @@ public class ContactsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
 
-        //mButton_LoadContacts = findViewById(R.id.button_LoadContacts);
+        contactsDbHelper = new MyContactsDBHelper(this);
 
         initViews();
-        AccessContact();
-        saveContacts();
-        //showContacts();
 
+        mButton_LoadContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AccessContact();
+                saveContacts();
+                showContacts();
+            }
+        });
+
+        mButton_ClearContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearContacts();
+            }
+        });
     }
 
     public void initViews(){
-        mTextView_Contacts = findViewById(R.id.textview_Contacts_List);
-        //ll = findViewById(R.id.listView);
+
+        mButton_LoadContacts = findViewById(R.id.button_Load);
+        mButton_ClearContacts = findViewById(R.id.button_Clean);
         contactListView = findViewById(R.id.listview_ContactsList);
-        contactsDbHelper = new MyContactsDBHelper(getApplicationContext());
+
     }
 
+    public void clearContacts(){
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage("Do You want to clear all the contacts.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        contactsDbHelper.removeContacts();
+                        showContacts();
+                    }
+                });
+        alertDialog.show();
+
+    }
 
     public void showContacts(){
 
@@ -82,6 +122,7 @@ public class ContactsListActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
                                         REQUEST_MULTIPLE_PERMISSIONS);
+
                             }
                         });
                 return;
@@ -113,17 +154,21 @@ public class ContactsListActivity extends AppCompatActivity {
     }
 
 
+
     public void saveContacts(){
 
         StringBuilder builder = new StringBuilder();
         ContentResolver contentResolver = getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,null,null, null,null);
+        total_contacts = cursor.getCount();
+
+        int c = 0;
 
         if(cursor.getCount() > 0){
-            while(cursor.moveToNext()){
+            while(cursor.moveToNext() && c < 10){
 
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
 
                 if(hasPhoneNumber > 0){
@@ -134,20 +179,21 @@ public class ContactsListActivity extends AppCompatActivity {
 
                     while (cursor2.moveToNext()){
 
-                        String phoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        phoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         builder.append("Contact: ").append(name).append(", Phone Number: ").append(phoneNumber).append("\n\n");
-                        contactsDbHelper.insertContact(name,phoneNumber);
-                    }
 
+                    }
+                    contactsDbHelper.insertContact(name,phoneNumber);
                     cursor2.close();
                 }
+                c =c + 1;
             }
+
         }
 
         cursor.close();
 
-        //mTextView_Contacts.setText(builder.toString());
-        Log.e("CONTACTS---->",builder.toString());
+        Log.e("CONTACTS---->",String.valueOf(total_contacts));
 
     }
 

@@ -66,11 +66,17 @@ public class UserListAdapter extends CursorAdapter {
             mUserEmail.setText(email);
             mUserPhone.setText(phone);
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] imageBytes = baos.toByteArray();
-            imageBytes = Base64.decode(photo, Base64.DEFAULT);
-            Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            mUserPhoto.setImageBitmap(decodedImage);
+            if(photo == null || photo.equals("NA")){
+
+                mUserPhoto.setImageResource(R.drawable.user_img);
+            }else{
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] imageBytes = baos.toByteArray();
+                imageBytes = Base64.decode(photo, Base64.DEFAULT);
+                Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                mUserPhoto.setImageBitmap(decodedImage);
+            }
+
 
     }
 
