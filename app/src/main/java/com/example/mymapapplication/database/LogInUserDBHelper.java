@@ -8,14 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-public class MyUserDBHelper extends SQLiteOpenHelper {
+public class LogInUserDBHelper extends SQLiteOpenHelper {
 
     // Database Name
     private static final String DATABASE_NAME = "MyContactsDB.db";
     private static final int DATABASE_VERSION = 3;
 
     // Table Name
-    private final static String TABLE_NAME = "my_contact";
+    private final static String TABLE_NAME = "log_in_user";
 
     // Table USER Columns
     private final static String _ID = BaseColumns._ID;
@@ -24,7 +24,7 @@ public class MyUserDBHelper extends SQLiteOpenHelper {
     private final static String COLUMN_USER_PHONE = "phone";
     private final static String COLUMN_USER_PHOTO = "photo";
 
-    public MyUserDBHelper(Context context) {
+    public LogInUserDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -61,8 +61,13 @@ public class MyUserDBHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NAME, null, values);
     }
 
+    public void removeUser(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_NAME,null,null);
+    }
+
     // Read Users from database
-    public Cursor readUsers() {
+    public Cursor readUser() {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {
                 _ID,

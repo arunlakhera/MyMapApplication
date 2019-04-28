@@ -12,7 +12,7 @@ public class MyContactsDBHelper extends SQLiteOpenHelper {
 
     // Database Name
     private static final String DATABASE_NAME = "MyContactsDB.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Table Name
     private final static String TABLE_NAME = "my_phone_contact";

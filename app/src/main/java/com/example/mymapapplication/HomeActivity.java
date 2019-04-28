@@ -126,7 +126,7 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(new Intent(HomeActivity.this, ContactsListActivity.class));
 
                 }else if(menuItem.getTitle().equals("Update Profile")){
-
+                    startActivity(new Intent(HomeActivity.this, UpdateProfileActivity.class));
 
                 }else if(menuItem.getTitle().equals("API Task")){
 

@@ -218,5 +218,4 @@ public class AddUserFragment extends Fragment {
         return encodedUserImage;
     }
 
-
 }
